@@ -12,8 +12,9 @@ export async function GET(request: NextRequest) {
         const userId = getDataFromToken(request);
         // find user without password
         const user = await User.findOne({ _id: userId }).select("-password");
+
+        return NextResponse.json({ message: "User found successfully ", success: true,  userId : user._id}, { status: 200 })
         
-        return NextResponse.json({ message: "User found successfully", success: true,  user }, { status: 200 })
     } catch (error: any) {
         return NextResponse.json({ message: error.message }, { status: error.status })
     }
