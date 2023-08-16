@@ -17,6 +17,7 @@ export default function LoginPage() {
       setIsLoading(true);
       const response = await axios.post("/api/users/login", loginForm);
       console.log(response);
+      router.push("/profile")
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -26,7 +27,9 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-2 text-black">
-      <h1 className="text-white">Login</h1>
+      <h1 className="text-white">
+        {(isLoading) ? "LOADING..." : "LOGIN"}
+        </h1>
 
       <input
         placeholder="email"

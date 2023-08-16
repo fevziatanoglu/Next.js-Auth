@@ -20,11 +20,13 @@ export default function SignUpPage() {
       setIsLoading(true);
       const response = await axios.post("/api/users/signup", signupForm);
       console.log(response.data);
+      router.push("/profile");
     } catch (error: any) {
       console.log(error);
     } finally {
       setIsLoading(false);
-    }};
+    }
+  };
 
   useEffect(() => {
     if (
