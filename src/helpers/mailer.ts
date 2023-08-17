@@ -2,12 +2,13 @@ import User from "@/models/userModel";
 import nodemailer from "nodemailer";
 import bcryptjs from "bcryptjs";
 
-export const sendEmail = async (email: string, emailType: string, userId: any) => {
-
+export const sendEmail = async (email: string, emailType: string, userId?: any) => {
     try {
 
         // hash user id as token
         const userIdToken = await bcryptjs.hash(userId, 10);
+        // hash user id as token
+        const emailToken = await bcryptjs.hash(email, 10);
 
 
 
@@ -20,13 +21,13 @@ export const sendEmail = async (email: string, emailType: string, userId: any) =
                     { verifyToken: userIdToken, verifyTokenExpiry: Date.now() + 7200000 },
                     { new: true, runValidators: true })
 
-        }else if (emailType === "RESET"){
+        } else if (emailType === "RESET") {
 
-             // create 2 hours forgot password token for user
-             await User.findByIdAndUpdate
-             (userId,
-                 { forgotPasswordToken: userIdToken, forgotPasswordTokenExpiry: Date.now() + 7200000 },
-                 { new: true, runValidators: true })
+            // create 2 hours forgot password token for user
+            await User.findOneAndUpdate
+                ({ email },
+                    { forgotPasswordToken: emailToken, forgotPasswordTokenExpiry: Date.now() + 7200000 },
+                    { new: true, runValidators: true })
 
         }
 
@@ -35,17 +36,19 @@ export const sendEmail = async (email: string, emailType: string, userId: any) =
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
-              user: process.env.TRANSPORT_USER,
-              pass: process.env.TRANSPORT_PASSWORD
+                user: process.env.TRANSPORT_USER,
+                pass: process.env.TRANSPORT_PASSWORD
             }
-          });
+        });
 
         // mail datas
         const mailDatas = {
-            from : "nextjsapp@gmail.com",
+            from: "nextjsapp@gmail.com",
             to: email,
-            subject : (emailType === "VERIFY") ? "Verify Your Account" : "Reset Your Password",
-            html : `<p> Click <a href="${process.env.DOMAIN}/verifyemail?token=${userIdToken}">Here</a> to verify email </p>`
+            subject: (emailType === "VERIFY") ? "Verify Your Account" : "Reset Your Password",
+            html: (emailType === "VERIFY")
+                ? `<p> Click <a href="${process.env.DOMAIN}/verifyemail?token=${userIdToken}">Here</a> to verify email </p>`
+                : `<p> Click <a href="${process.env.DOMAIN}/forgotpassword?token=${emailToken}">Here</a> to reset your password </p>`
         }
 
         // send
@@ -54,7 +57,8 @@ export const sendEmail = async (email: string, emailType: string, userId: any) =
 
     } catch (error: any) {
         console.log("mailer error!");
-        throw new Error(error.message );
+        console.log(error);
+        throw new Error(error.message);
     }
 
 }

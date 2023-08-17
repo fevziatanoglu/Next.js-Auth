@@ -25,11 +25,9 @@ export default function ProfilePage(){
     }
 
     const getUserDetails = async () => {
-
         const response = await axios.get("/api/users/getUserData");
         console.log(response);
         setUser(response.data.user);
-
     }
 
     useEffect(()=>{

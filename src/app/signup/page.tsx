@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { sendEmail } from "@/helpers/mailer";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -25,6 +26,21 @@ export default function SignUpPage() {
       console.log(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const forgotPassword = async () => {
+    // SEND VERİFY EMAIL
+
+    //
+    try {
+      await axios.post("/api/email/sendEmail", {
+        email: signupForm.email,
+        emailType: "RESET",
+        userId: "empty",
+      });
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
@@ -77,6 +93,10 @@ export default function SignUpPage() {
         disabled={buttonDisabled}
       >
         {buttonDisabled ? "Enter your info" : "Sign Up"}
+      </button>
+
+      <button className="text-white bg-orange-500" onClick={forgotPassword}>
+        Forgot Password ?
       </button>
     </div>
   );
