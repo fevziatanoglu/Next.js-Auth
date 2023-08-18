@@ -33,9 +33,10 @@ export default function VerifyEmailPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-5 py-2">
-      <h2 className="p-2 bg-blue-500 text-white rounded-md">
+      
+      {/* <h2 className="p-2 bg-blue-500 text-white rounded-md">
         {token ? `token : ${token}` : "no token"}
-      </h2>
+      </h2> */}
 
       <form 
       onSubmit={(e)=>resetPassword(e)}
