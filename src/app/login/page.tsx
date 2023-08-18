@@ -42,13 +42,18 @@ export default function LoginPage() {
     e.preventDefault();
     // SEND VERİFY EMAIL
     try {
+      setIsLoading(true);
       await axios.post("/api/email/sendEmail", {
         email: loginForm.email,
         emailType: "RESET",
         userId: "empty",
-      });
+      }).then(response =>{
+        toast.success(response.data.message);
+      })
     } catch (error: any) {
-      console.log(error);
+      toast.success(error.response.data.message);
+    }finally{
+      setIsLoading(false);
     }
   };
 
