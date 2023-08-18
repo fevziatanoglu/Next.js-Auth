@@ -12,6 +12,7 @@ export default function VerifyEmailPage() {
 
   const resetPassword = async ( e : React.FormEvent<HTMLElement>) => {
     e.preventDefault();
+    console.log(newPassword);
     try {
       setIsLoading(true);
       await axios.post("/api/users/forgotpassword", {token,newPassword,}).then(response =>{

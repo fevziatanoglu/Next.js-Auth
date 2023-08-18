@@ -22,8 +22,10 @@ export async function POST(request: NextRequest) {
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hashSync(newPassword, salt);
 
-        // change and save user
-        user.password = newPassword;
+        // delete tokens , change password and save user
+        user.password = hashedPassword;
+        user.forgotPasswordToken = undefined;
+        user.forgotPasswordTokenExpiry = undefined;
         await user.save();
 
         return NextResponse.json({ message: "Password changed successfully." }, { status: 200});
