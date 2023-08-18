@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { sendEmail } from "@/helpers/mailer";
+import { toast } from "react-hot-toast";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -16,20 +16,20 @@ export default function SignUpPage() {
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const onSignup = async (e : React.FormEvent<HTMLElement>) => {
+  const onSignup = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const response = await axios.post("/api/users/signup", signupForm);
-      console.log(response.data);
-      router.push("/profile");
+      await axios.post("/api/users/signup", signupForm).then((response) => {
+        toast.success(response.data.message);
+        router.push("/profile");
+      });
     } catch (error: any) {
-      console.log(error);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }
   };
-
 
   useEffect(() => {
     if (
@@ -54,8 +54,8 @@ export default function SignUpPage() {
           LET'S CREATE AN ACCOUNT
         </h1>
 
-         {/* username */}
-         <div className="mb-4">
+        {/* username */}
+        <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Username
           </label>
@@ -107,17 +107,14 @@ export default function SignUpPage() {
           />
         </div>
 
-     
-          {/* sign up */}
-          <button
-            className="min-w-full bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-            disabled={buttonDisabled}
-          >
-            {isLoading ? "LOADING..." : "SIGN UP"}
-          </button>
-
-
+        {/* sign up */}
+        <button
+          className="min-w-full bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+          disabled={buttonDisabled}
+        >
+          {isLoading ? "LOADING..." : "SIGN UP"}
+        </button>
 
         <div className="text-sm flex flex-row justify-center mt-4">
           <p>Already have an account?</p>
@@ -129,8 +126,6 @@ export default function SignUpPage() {
           </Link>
         </div>
       </form>
-
-      
     </div>
   );
 }

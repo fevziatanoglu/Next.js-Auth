@@ -26,13 +26,12 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       await axios.post("/api/users/login", loginForm).then((response) => {
-        // log by toast
-        console.log(response.data.message);
+        toast.success(response.data.message);
         router.push("/profile");
       });
     } catch (error: any) {
       // log by toast
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }

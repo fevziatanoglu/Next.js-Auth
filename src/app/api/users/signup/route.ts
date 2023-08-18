@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         // check user is exist
         const user = await User.findOne({ email });
         if (user) {
-            return NextResponse.json({ error: "User already exists" }, { status: 409 })
+            throw new Error("User already exists");
         }
 
         // hash password
@@ -49,6 +49,6 @@ export async function POST(request: NextRequest) {
 
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message , page : "signup-route" }, { status: error.status || 500 });
+        return NextResponse.json({ message: error.message }, { status: error.status || 500 });
     }
 }
