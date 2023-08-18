@@ -58,8 +58,6 @@ export const sendEmail = async (email: string, emailType: string, userId?: any) 
         return sendMailResponse;
 
     } catch (error: any) {
-        console.log("mailer error!");
-        console.log(error);
         throw new Error(error.message);
     }
 

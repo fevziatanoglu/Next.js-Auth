@@ -13,7 +13,6 @@ export async function POST(request: NextRequest) {
         // get datas from frontend
         const reqBody = await request.json();
         const { username, email, password } = reqBody;
-        console.log(reqBody);
        
         // check user is exist
         const user = await User.findOne({ email });
@@ -32,8 +31,7 @@ export async function POST(request: NextRequest) {
             password: hashedPassword
         });
         await newUser.save();
-        // const savedUser = await newUser.save();
-        // console.log(savedUser);
+       
 
 
         // SEND VERİFY EMAIL

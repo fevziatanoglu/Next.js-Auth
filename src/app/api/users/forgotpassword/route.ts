@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
     try {  // get token from request
         const reqBody = await request.json();
         const { token, newPassword } = reqBody;
-        console.log(token + "forgot page");
 
         // find user by forgot password token and expiry is bigger than now's date
         const user = await User.findOne({ forgotPasswordToken: token });

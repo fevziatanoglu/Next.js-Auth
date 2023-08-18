@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
         // get token from request
         const reqBody = await request.json();
         const { token } = reqBody;
-        console.log(token + " verifyemail page");
+  
 
         // find user by verifyToken and expiry is bigger than now's date
         const user = await User.findOne({ verifyToken: token });

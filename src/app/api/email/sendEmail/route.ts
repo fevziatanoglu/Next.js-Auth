@@ -7,7 +7,6 @@ export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
         const { email, emailType, userId } = reqBody;
-        console.log(reqBody);
 
         const response = await sendEmail( email, emailType , userId);
 
