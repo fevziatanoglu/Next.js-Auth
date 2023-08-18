@@ -16,7 +16,8 @@ export default function SignUpPage() {
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const onSignup = async () => {
+  const onSignup = async (e : React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
     try {
       setIsLoading(true);
       const response = await axios.post("/api/users/signup", signupForm);
@@ -29,20 +30,6 @@ export default function SignUpPage() {
     }
   };
 
-  const forgotPassword = async () => {
-    // SEND VERİFY EMAIL
-
-    //
-    try {
-      await axios.post("/api/email/sendEmail", {
-        email: signupForm.email,
-        emailType: "RESET",
-        userId: "empty",
-      });
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     if (
@@ -58,46 +45,92 @@ export default function SignUpPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-2 text-black">
-      <h1 className="text-white">Sign Up</h1>
-
-      <input
-        placeholder="username"
-        type="text"
-        value={signupForm.username}
-        onChange={(e) =>
-          setSignupForm({ ...signupForm, username: e.target.value })
-        }
-      ></input>
-
-      <input
-        placeholder="email"
-        type="text"
-        value={signupForm.email}
-        onChange={(e) =>
-          setSignupForm({ ...signupForm, email: e.target.value })
-        }
-      ></input>
-
-      <input
-        placeholder="password"
-        type="password"
-        value={signupForm.password}
-        onChange={(e) =>
-          setSignupForm({ ...signupForm, password: e.target.value })
-        }
-      ></input>
-
-      <button
-        className="bg-white text-orange-500"
-        onClick={onSignup}
-        disabled={buttonDisabled}
+      <form
+        onSubmit={(e) => onSignup(e)}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        {buttonDisabled ? "Enter your info" : "Sign Up"}
-      </button>
+        {/* header */}
+        <h1 className="text-blue-500 text-center text-2xl font-bold mb-6 ">
+          LET'S CREATE AN ACCOUNT
+        </h1>
 
-      <button className="text-white bg-orange-500" onClick={forgotPassword}>
-        Forgot Password ?
-      </button>
+         {/* username */}
+         <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Username
+          </label>
+
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            placeholder="Username"
+            value={signupForm.username}
+            onChange={(e) =>
+              setSignupForm({ ...signupForm, username: e.target.value })
+            }
+          />
+        </div>
+
+        {/* email */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Email
+          </label>
+
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            placeholder="Email"
+            value={signupForm.email}
+            onChange={(e) =>
+              setSignupForm({ ...signupForm, email: e.target.value })
+            }
+          />
+        </div>
+
+        {/* password */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Password
+          </label>
+          <input
+            className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="password"
+            placeholder="Password"
+            value={signupForm.password}
+            onChange={(e) =>
+              setSignupForm({ ...signupForm, password: e.target.value })
+            }
+          />
+        </div>
+
+     
+          {/* sign up */}
+          <button
+            className="min-w-full bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+            disabled={buttonDisabled}
+          >
+            {isLoading ? "LOADING..." : "SIGN UP"}
+          </button>
+
+
+
+        <div className="text-sm flex flex-row justify-center mt-4">
+          <p>Already have an account?</p>
+          <Link
+            className="ml-1 inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 hover:cursor-pointer"
+            href="/login"
+          >
+            Let's Sign in
+          </Link>
+        </div>
+      </form>
+
+      
     </div>
   );
 }
