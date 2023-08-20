@@ -13,6 +13,11 @@ export async function GET(request: NextRequest) {
         // find user without password
         const user = await User.findOne({ _id: userId }).select("-password");
 
+        // user not find
+        if(!user){
+            return NextResponse.json({ message: "User not found"}, { status: 200 })
+        }
+
         return NextResponse.json({ message: "User found successfully ", success: true,  userId : user._id}, { status: 200 })
         
     } catch (error: any) {
